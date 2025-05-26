@@ -54,6 +54,7 @@ Start creating your standout resume with Reactive Resume today!
 - Jot down personal notes specific to your resume that's only visible to you
 - Lock a resume to prevent making any further edits (useful for master templates)
 - **Dozens of templates** to choose from, ranging from professional to modern
+- Browse community-made templates from the new marketplace and share your own
 - Design your resume using the standardised EuroPass design template
 - Supports printing resumes in A4 or Letter page formats
 - Design your resume with any font that's available on [Google Fonts](https://fonts.google.com/)

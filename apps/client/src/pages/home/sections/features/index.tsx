@@ -25,8 +25,10 @@ import {
   TextAa,
   Translate,
 } from "@phosphor-icons/react";
-import { cn, languages, templatesList } from "@reactive-resume/utils";
+import { cn, languages } from "@reactive-resume/utils";
 import { motion } from "framer-motion";
+
+import { useTemplates } from "@/client/services/template";
 
 type Feature = {
   icon: React.ReactNode;
@@ -40,7 +42,8 @@ const featureLabel = cn(
 
 export const FeaturesSection = () => {
   const languagesCount = languages.length;
-  const templatesCount = templatesList.length;
+  const { templates } = useTemplates();
+  const templatesCount = templates ? templates.builtIn.length + templates.community.length : 0;
 
   const features: Feature[] = [
     { icon: <CurrencyDollarSimple />, title: t`Free, forever` },

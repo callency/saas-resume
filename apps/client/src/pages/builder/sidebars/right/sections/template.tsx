@@ -1,8 +1,9 @@
 import { t } from "@lingui/macro";
 import { AspectRatio } from "@reactive-resume/ui";
-import { cn, templatesList } from "@reactive-resume/utils";
+import { cn } from "@reactive-resume/utils";
 import { motion } from "framer-motion";
 
+import { useTemplates } from "@/client/services/template";
 import { useResumeStore } from "@/client/stores/resume";
 
 import { SectionIcon } from "../shared/section-icon";
@@ -10,6 +11,7 @@ import { SectionIcon } from "../shared/section-icon";
 export const TemplateSection = () => {
   const setValue = useResumeStore((state) => state.setValue);
   const currentTemplate = useResumeStore((state) => state.resume.data.metadata.template);
+  const { templates } = useTemplates();
 
   return (
     <section id="template" className="grid gap-y-6">
@@ -21,7 +23,7 @@ export const TemplateSection = () => {
       </header>
 
       <main className="grid grid-cols-2 gap-8 @lg/right:grid-cols-3 @2xl/right:grid-cols-4">
-        {templatesList.map((template, index) => (
+        {templates?.builtIn.map((template, index) => (
           <AspectRatio key={template} ratio={1 / 1.4142}>
             <motion.div
               initial={{ opacity: 0 }}
@@ -40,6 +42,33 @@ export const TemplateSection = () => {
               <div className="absolute inset-x-0 bottom-0 h-32 w-full bg-gradient-to-b from-transparent to-background/80">
                 <p className="absolute inset-x-0 bottom-2 text-center font-bold capitalize text-primary">
                   {template}
+                </p>
+              </div>
+            </motion.div>
+          </AspectRatio>
+        ))}
+        {templates?.community.map((template, index) => (
+          <AspectRatio key={template.slug} ratio={1 / 1.4142}>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{
+                opacity: 1,
+                transition: { delay: (templates.builtIn.length + index) * 0.1 },
+              }}
+              whileTap={{ scale: 0.98, transition: { duration: 0.1 } }}
+              className={cn(
+                "relative cursor-pointer rounded-sm ring-primary transition-all hover:ring-2",
+                currentTemplate === template.slug && "ring-2",
+              )}
+              onClick={() => {
+                setValue("metadata.template", template.slug);
+              }}
+            >
+              <img src={template.preview} alt={template.name} className="rounded-sm" />
+
+              <div className="absolute inset-x-0 bottom-0 h-32 w-full bg-gradient-to-b from-transparent to-background/80">
+                <p className="absolute inset-x-0 bottom-2 text-center font-bold capitalize text-primary">
+                  {template.name}
                 </p>
               </div>
             </motion.div>
