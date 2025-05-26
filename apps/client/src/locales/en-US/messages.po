@@ -577,6 +577,18 @@ msgstr "Finally,"
 msgid "Fix Spelling & Grammar"
 msgstr "Fix Spelling & Grammar"
 
+#: apps/client/src/components/ai-actions.tsx
+msgid "Generate Bullet Points"
+msgstr "Generate Bullet Points"
+
+#: apps/client/src/components/ai-actions.tsx
+msgid "Match Job Description"
+msgstr "Match Job Description"
+
+#: apps/client/src/components/ai-actions.tsx
+msgid "Paste the job description:"
+msgstr "Paste the job description:"
+
 #: apps/client/src/pages/builder/sidebars/right/sections/typography.tsx:107
 msgid "Font Family"
 msgstr "Font Family"
