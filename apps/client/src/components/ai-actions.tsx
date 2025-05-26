@@ -4,8 +4,10 @@ import {
   ChatTeardropText,
   CircleNotch,
   Exam,
+  ListBullets,
   MagicWand,
   PenNib,
+  Target,
 } from "@phosphor-icons/react";
 import {
   Badge,
@@ -21,10 +23,12 @@ import { useState } from "react";
 import { toast } from "../hooks/use-toast";
 import { changeTone } from "../services/openai/change-tone";
 import { fixGrammar } from "../services/openai/fix-grammar";
+import { generateBullets } from "../services/openai/generate-bullets";
 import { improveWriting } from "../services/openai/improve-writing";
+import { matchJobDescription } from "../services/openai/match-job-description";
 import { useOpenAiStore } from "../stores/openai";
 
-type Action = "improve" | "fix" | "tone";
+type Action = "improve" | "fix" | "tone" | "bullets" | "match";
 type Mood = "casual" | "professional" | "confident" | "friendly";
 
 type Props = {
@@ -48,6 +52,15 @@ export const AiActions = ({ value, onChange, className }: Props) => {
       if (action === "improve") result = await improveWriting(value);
       if (action === "fix") result = await fixGrammar(value);
       if (action === "tone" && mood) result = await changeTone(value, mood);
+      if (action === "bullets") result = await generateBullets(value);
+      if (action === "match") {
+        const description = window.prompt(t`Paste the job description:`);
+        if (!description) {
+          setLoading(false);
+          return;
+        }
+        result = await matchJobDescription(value, description);
+      }
 
       onChange(result);
     } catch (error) {
@@ -88,6 +101,16 @@ export const AiActions = ({ value, onChange, className }: Props) => {
       <Button size="sm" variant="outline" disabled={!!loading} onClick={() => onClick("fix")}>
         {loading === "fix" ? <CircleNotch className="animate-spin" /> : <Exam />}
         <span className="ml-2 text-xs">{t`Fix Spelling & Grammar`}</span>
+      </Button>
+
+      <Button size="sm" variant="outline" disabled={!!loading} onClick={() => onClick("bullets")}>
+        {loading === "bullets" ? <CircleNotch className="animate-spin" /> : <ListBullets />}
+        <span className="ml-2 text-xs">{t`Generate Bullet Points`}</span>
+      </Button>
+
+      <Button size="sm" variant="outline" disabled={!!loading} onClick={() => onClick("match")}>
+        {loading === "match" ? <CircleNotch className="animate-spin" /> : <Target />}
+        <span className="ml-2 text-xs">{t`Match Job Description`}</span>
       </Button>
 
       <DropdownMenu>

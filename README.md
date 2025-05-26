@@ -46,6 +46,7 @@ Start creating your standout resume with Reactive Resume today!
 - You can also sign in with your GitHub or Google account, and even set up two-factor authentication for extra security
 - Create as many resumes as you like under a single account, optimising each resume for every job application based on its description for a higher ATS score
 - **Bring your own OpenAI API key** and unlock features such as improving your writing, fixing spelling and grammar or changing the tone of your text in one-click
+- **AI-powered suggestions** like automatic bullet-point generation and job description matching to tailor your resume for specific roles
 - Translate your resume into any language using ChatGPT and import it back for easier editing
 - Create single page resumes or a resume that spans multiple pages easily
 - Customize the colours and layouts to add a personal touch to your resume
