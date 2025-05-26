@@ -5,7 +5,13 @@ import {
   Logger,
 } from "@nestjs/common";
 import { Prisma } from "@prisma/client";
-import { CreateResumeDto, ImportResumeDto, ResumeDto, UpdateResumeDto } from "@reactive-resume/dto";
+import {
+  CreateResumeDto,
+  ImportResumeDto,
+  ResumeDto,
+  UpdateResumeDto,
+  UpdateStatisticsDto,
+} from "@reactive-resume/dto";
 import { defaultResumeData, ResumeData } from "@reactive-resume/schema";
 import type { DeepPartial } from "@reactive-resume/utils";
 import { ErrorMessage, generateRandomName } from "@reactive-resume/utils";
@@ -74,14 +80,44 @@ export class ResumeService {
 
   async findOneStatistics(id: string) {
     const result = await this.prisma.statistics.findFirst({
-      select: { views: true, downloads: true },
+      select: { views: true, downloads: true, sectionTimes: true, locations: true },
       where: { resumeId: id },
     });
 
     return {
       views: result?.views ?? 0,
       downloads: result?.downloads ?? 0,
+      sectionTimes: (result?.sectionTimes as Record<string, number>) ?? {},
+      locations: (result?.locations as Record<string, number>) ?? {},
     };
+  }
+
+  async updateStatistics(id: string, data: UpdateStatisticsDto) {
+    const existing = await this.prisma.statistics.findFirst({ where: { resumeId: id } });
+
+    const sectionTimes: Record<string, number> = (existing?.sectionTimes as any) ?? {};
+    if (data.sectionTimes) {
+      for (const [key, value] of Object.entries(data.sectionTimes)) {
+        sectionTimes[key] = (sectionTimes[key] ?? 0) + value;
+      }
+    }
+
+    const locations: Record<string, number> = (existing?.locations as any) ?? {};
+    if (data.location) {
+      locations[data.location] = (locations[data.location] ?? 0) + 1;
+    }
+
+    return this.prisma.statistics.upsert({
+      where: { resumeId: id },
+      create: {
+        views: 0,
+        downloads: 0,
+        resumeId: id,
+        sectionTimes,
+        locations,
+      },
+      update: { sectionTimes, locations },
+    });
   }
 
   async findOneByUsernameSlug(username: string, slug: string, userId?: string) {

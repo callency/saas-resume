@@ -19,6 +19,7 @@ import {
   importResumeSchema,
   ResumeDto,
   UpdateResumeDto,
+  UpdateStatisticsDto,
 } from "@reactive-resume/dto";
 import { resumeDataSchema } from "@reactive-resume/schema";
 import { ErrorMessage } from "@reactive-resume/utils";
@@ -89,6 +90,12 @@ export class ResumeController {
   @UseGuards(TwoFactorGuard)
   findOneStatistics(@Param("id") id: string) {
     return this.resumeService.findOneStatistics(id);
+  }
+
+  @Post(":id/statistics")
+  @UseGuards(OptionalGuard)
+  updateStatistics(@Param("id") id: string, @Body() analytics: UpdateStatisticsDto) {
+    return this.resumeService.updateStatistics(id, analytics);
   }
 
   @Get("/public/:username/:slug")

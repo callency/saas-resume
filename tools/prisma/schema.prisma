@@ -72,6 +72,8 @@ model Statistics {
   id        String   @id @default(cuid())
   views     Int      @default(0)
   downloads Int      @default(0)
+  sectionTimes Json?
+  locations Json?
   resumeId  String   @unique
   resume    Resume   @relation(fields: [resumeId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())

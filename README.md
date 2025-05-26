@@ -58,7 +58,7 @@ Start creating your standout resume with Reactive Resume today!
 - Supports printing resumes in A4 or Letter page formats
 - Design your resume with any font that's available on [Google Fonts](https://fonts.google.com/)
 - **Share a personalised link of your resume** to companies or recruiters for them to get the latest updates
-- You can track the number of views or downloads your public resume has received
+- You can track the number of views or downloads your public resume has received, along with metrics like time spent on each section and where your viewers are located
 - Built with state-of-the-art (at the moment) and dependable technologies that's battle tested and peer reviewed by the open-source community on GitHub
 - **MIT License**, so do what you like with the code as long as you credit the original author
 - And yes, there’s a dark mode too 🌓
