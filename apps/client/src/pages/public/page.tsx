@@ -11,7 +11,11 @@ import { Link, redirect, useLoaderData } from "react-router";
 import { Icon } from "@/client/components/icon";
 import { ThemeSwitch } from "@/client/components/theme-switch";
 import { queryClient } from "@/client/libs/query-client";
-import { findResumeByUsernameSlug, usePrintResume } from "@/client/services/resume";
+import {
+  findResumeByUsernameSlug,
+  usePrintResume,
+  useSendResumeAnalytics,
+} from "@/client/services/resume";
 
 const openInNewTab = (url: string) => {
   const win = window.open(url, "_blank");
@@ -22,6 +26,9 @@ export const PublicResumePage = () => {
   const frameRef = useRef<HTMLIFrameElement>(null);
 
   const { printResume, loading } = usePrintResume();
+  const { sendResumeAnalytics } = useSendResumeAnalytics();
+
+  const startRef = useRef<number>(Date.now());
 
   const { id, title, data: resume } = useLoaderData();
   const format = resume.metadata.page.format as keyof typeof pageSizeMap;
@@ -39,6 +46,17 @@ export const PublicResumePage = () => {
     frameRef.current.addEventListener("load", updateResumeInFrame);
     return () => frameRef.current?.removeEventListener("load", updateResumeInFrame);
   }, [frameRef]);
+
+  useEffect(() => {
+    return () => {
+      const timeSpent = Math.round((Date.now() - startRef.current) / 1000);
+      const location = navigator.language;
+      sendResumeAnalytics({
+        id,
+        analytics: { sectionTimes: { page: timeSpent }, location },
+      });
+    };
+  }, []);
 
   useEffect(() => {
     if (!frameRef.current?.contentWindow) return;
